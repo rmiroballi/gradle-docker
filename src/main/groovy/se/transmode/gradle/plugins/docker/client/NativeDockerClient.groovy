@@ -43,11 +43,14 @@ class NativeDockerClient implements DockerClient {
 
     private static String executeAndWait(String cmdLine) {
         def process = cmdLine.execute()
-        process.waitFor()
+        // wait for process, displaying stdout and stderr
+        process.waitForProcessOutput(System.out,System.err)
+
         if (process.exitValue()) {
-            throw new GradleException("Docker execution failed\nCommand line [${cmdLine}] returned:\n${process.err.text}")
+            throw new GradleException("Docker execution failed\nCommand line [${cmdLine}]")
         }
-        return process.in.text
+
+        return "Done"
     }
 
 }
