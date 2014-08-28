@@ -18,6 +18,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
@@ -115,10 +116,7 @@ class DockerTask extends DefaultTask {
             target = new File(stageDir, source.name)
         }
         stageBacklog.add { ->
-            project.copy {
-                from source
-                into target
-            }
+            ant.copy(file: source.absolutePath,toDir: target.absolutePath)
         }
         instructions.add("ADD ${source.name} ${destination}")
     }
