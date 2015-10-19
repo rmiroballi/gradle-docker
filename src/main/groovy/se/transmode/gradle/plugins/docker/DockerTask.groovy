@@ -47,7 +47,7 @@ class DockerTask extends DefaultTask {
     Boolean dryRun
     // Whether or not to push the image into the registry (default: false)
     Boolean push
-    // Hostname, port of the docker image registry unless Docker index is used
+    // Hostname, port of the docker image registry unless Docker Registry Hub is used
     String registry
 
     /**
@@ -114,9 +114,19 @@ class DockerTask extends DefaultTask {
         def target = stageDir
         if (source.isDirectory()) {
             target = new File(stageDir, source.name)
-        }
-        stageBacklog.add { ->
-            ant.copy(file: source.absolutePath,toDir: target.absolutePath)
+        	stageBacklog.add { ->
+            	ant.copy(toDir: target.absolutePath) {
+            		fileset(dir: source.absolutePath)
+            	}
+            }
+        } else {
+            stageBacklog.add { ->
+            	ant.copy(toDir: target.absolutePath) {
+            		fileset(dir: source.absolutePath.substring(0, source.absolutePath.lastIndexOf(File.separator))) {
+            			include(name: source.absolutePath.substring(source.absolutePath.lastIndexOf(File.separator) + 1, source.absolutePath.length()))
+            		}
+            	}
+        	}
         }
         instructions.add("ADD ${source.name} ${destination}")
     }
