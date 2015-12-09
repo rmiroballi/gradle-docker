@@ -45,27 +45,24 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            url 'https://api.bintray.com/maven/transmode/gradle-plugins/gradle-docker'
-            credentials {
-                username = bintrayUser
-                password = bintrayKey
-            }
-        }
-    }
+	repositories {
+	    maven {
+	        url 'http://elsols.artifactoryonline.com/elsols/repo'
+	        credentials {
+	            username = "crichmond"
+	            password = "Baseball1"
+		        }
+		    }
+	}
 }
 
 artifactory {
-    contextUrl = artifactoryUrl
-    resolve {
-        repoKey = "repo"
-    }
+    contextUrl = "http://elsols.artifactoryonline.com/elsols"
     publish {
         repository {
-            repoKey = artifactoryRepo
-            username = bintrayUser
-            password = bintrayKey
+            repoKey = "libs-releases-local"
+            username = "crichmond"
+            password = "Baseball1"
         }
         defaults {
             publications ('maven')
