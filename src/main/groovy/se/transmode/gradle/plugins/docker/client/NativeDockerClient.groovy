@@ -18,6 +18,7 @@ package se.transmode.gradle.plugins.docker.client
 import com.google.common.base.Preconditions
 import org.gradle.api.GradleException
 
+
 class NativeDockerClient implements DockerClient {
 
     private final String binary;
@@ -30,7 +31,10 @@ class NativeDockerClient implements DockerClient {
     @Override
     String buildImage(File buildDir, String tag) {
         Preconditions.checkArgument(tag as Boolean,  "Image tag can not be empty or null.")
-        def cmdLine = "${binary} build -t ${tag} ${buildDir}"
+        def f = buildDir.getAbsolutePath()
+        def nf = f.replace('\\','/')
+        def cmdLine = "${binary} build -t ${tag} ${nf}"
+        System.out.println(cmdLine)
         return executeAndWait(cmdLine)
     }
 
